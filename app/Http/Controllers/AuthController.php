@@ -47,7 +47,7 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        // dd('gygygygyg');
+        
         try {
 
             $validatedData = $request->validate([
@@ -55,7 +55,7 @@ class AuthController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:8',
             ]);
-            //dd($validatedData['name']);
+            
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
