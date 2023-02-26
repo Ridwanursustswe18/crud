@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +30,11 @@ Route::get('token', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout'])->name('logout');
-Route::prefix('blog')->group(function(){
-
+Route::prefix('/blogs')->group(function(){
+    Route::get('/{blog}/edit',[BlogController::class,'edit']);
     Route::post('/create',[BlogController::class,'create']);
-    Route::patch('/update/{id}', [BlogController::class, 'update']);
-    Route::delete('/delete/{id}',[BlogController::class,'destroy']);
+    Route::patch('/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+    Route::delete('/{blog}',[BlogController::class,'destroy']);
+    Route::get('show',[BlogController::class,'show'])->name('blogs.show');
 });
 // Route::get('/register')->name('register');

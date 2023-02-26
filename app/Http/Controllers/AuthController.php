@@ -23,8 +23,9 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 return redirect()->intended('hello');
+            } else {
+                return 'These credentials do not match our records.';
             }
-            return redirect()->route('login')->withErrors('These credentials do not match our records.');
         } catch (Exception $e) {
             $e->getMessage();
         }
@@ -47,20 +48,28 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        
+
         try {
 
             $validatedData = $request->validate([
                 'name' => 'required|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:8',
+                'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:5000'
             ]);
-            
+
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
-                'password' => bcrypt($validatedData['password'])
+                'password' => bcrypt($validatedData['password']),
+
             ]);
+            if ($request->hasFile('profile_picture') && $validatedData['profile_picture']) {
+                $profile_picture = $request->file('profile_picture');
+                $path = $profile_picture->store('profilePictures', 'public');
+                $user->profile_picture = $path;
+                $user->save();
+            }
 
             Auth::login($user);
 
