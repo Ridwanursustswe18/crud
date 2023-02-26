@@ -65,9 +65,10 @@ class BlogController extends Controller
 
         try {
 
-            $id = $blog->id;
-            //dd($id);
-            //$this->authorize('update', $blog);
+           
+            $id = auth()->user()->id;
+           // dd($id);
+            $this->authorize('update', $blog);
 
             $validatedData = $request->validate([
                 'title' => 'nullable|max:255',
