@@ -37,4 +37,4 @@ Route::prefix('/blogs')->group(function(){
     Route::delete('/{blog}',[BlogController::class,'destroy']);
     Route::get('show',[BlogController::class,'show'])->name('blogs.show');
 });
-// Route::get('/register')->name('register');
+ Route::get('/register',[AuthController::class,'showRegistrationForm'])->name('register');
